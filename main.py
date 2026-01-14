@@ -1,48 +1,50 @@
-#Persona 1
+#Carlos
 import os
 import time
 import config
 
-#Configuración
+#Configuración.
 filas = 10
 columnas = 10
 letras_fila = ['A','B','C','D','E','F','G','H','I','J']
+sala = []             #Matriz.
+pelicula_actual = {}  #Película seleccionada.
 
-sala = []             #Matriz
-pelicula_actual = {}  #Película elegida
 
-
-def inicializar_matriz(): #Crear sala.
+def inicializar_matriz(): #Crear sala referencia.
     global sala
     for fila in range(filas):
         nueva_fila = []
         for columna in range(columnas):
             nueva_fila.append('[L]')
         sala.append(nueva_fila)
+        
 
 def mostrar_sala():
-    #Información de la película.
-    titulo = pelicula_actual.get('titulo', 'Sin Selección') #.get(clave, valor por defecto)
-    precio = pelicula_actual.get('precio', 0.00)
-    print(f"Función: {titulo} | Precio: ${precio}.")
+    #Información de película.
+    titulo = pelicula_actual.get('titulo', 'sin selección') #.get(clave, valor por defecto)
+    tarifa = pelicula_actual.get('tarifa', 0.00)
     
-    print("    ", end = "")
+    print("S. CINE\n")
+    print(f"Función : {titulo}") 
+    print(f"Tarifa  : ${tarifa}\n")
+    
+    print("", end = "")
     for numero in range(1, columnas + 1):
-        print(f"{numero : >3}", end = " ")
-    print()
+        print(f"{numero :>3}", end = "")
+        
+    print("")
 
-    # Línea separadora
-    print("    " + "-" * (columnas * 4))
 
     for i in range(filas):
-        print(letras_fila[i], "|", end = " ")
+        print(f"{letras_fila[i]} ", end = "")
 
         for asiento in sala[i]:
-            print(asiento, end = " ")
+            print(asiento, end = "")
 
-        print("|", letras_fila[i])
+        print()
 
-    print("[L] = Libre.   [V] = Vendido.   [R] = Reservado.")
+    print("\n[L] = Libre.   [V] = Vendido.   [R] = Reservado.\n")
 
 def limpiar_consola():
     if os.name == 'nt': # nt = Windows.
@@ -59,10 +61,12 @@ def configurar_inicio():
     
     while True:
         limpiar_consola()
-        print("Funciones: ")
-        # Mostramos las opciones
+        print("Funciones:\n")
+        #funciones.json
         for i in range(len(funciones)):
-            print(i + 1, ".", funciones[i]["titulo"], "($", funciones[i]["precio"], ")")
+            print(f"{i + 1}. {funciones[i]['titulo']} (${funciones[i]['tarifa']}).")
+            
+        print()
             
         try:
             seleccion = int(input("Número de selección: ")) - 1
@@ -79,25 +83,51 @@ def configurar_inicio():
             time.sleep(1) #Pausar programa 1 segundo (time.sleep).
 
 def iniciar_programa():
-    inicializar_matriz()  #Crear la sala vacía
-    configurar_inicio()   #Elegir película
+    inicializar_matriz()  #Crear la sala vacía.
+    configurar_inicio()   #Película.
     
     while True:
         limpiar_consola()
         mostrar_sala()
         
-        print("1. Vender (en proceso de creación).")
-        print("2. Salir")
+        print("1. Vender entrada (L/V).")
+        print("2. Reservar asiento (L/R).")
+        print("3. Cancelar/liberar (L).")
+        print("4. Buscar reserva (función recursiva).")
+        print("5. Cierre administrativo (csv).")
+        print("6. Guardar/salir (actualizar txt)\n")
         
-        seleccion = input("Número de selección: ")
+        seleccion = str(input("Número de selección: "))
         
-        if seleccion == '1':
-            print("En proceso de creación.")
-            time.sleep(1) #Pausar programa 1 segundo (time.sleep).
+        match seleccion:
+            #Las funciones = archivo.función_creada...
+            case "1":
+                print("ventas.vender_boleto(sala, pelicula_actual['precio'])") #Emily
+                input("ENTER para volver.")
+                
+            case "2":
+                print("reservas.reservar_asiento(sala)") #Ariela
+                input("ENTER para volver.")
+                
+            case "3":
+                print("reservas.cancelar_asiento(sala)") #Ariela
+                input("ENTER para volver.")
             
-        elif seleccion == '2':
-            print("Programa cerrado.")
-            break
+            case "4":
+                print("config.buscar_recursivo(sala)") #Persona 5
+                input("ENTER para volver.")
+            
+            case "5":
+                print("archivos.generar_reporte()") #Persona 4
+                input("ENTER para volver.")
+                
+            case "6":
+                print("sala.txt") #Persona 4
+                print("Programa cerrado (actualización no terminada).")
+                break
+                
+            case _:
+                print("No válido.")
 
 if __name__ == "__main__": #Ejecutar programa
     iniciar_programa()
